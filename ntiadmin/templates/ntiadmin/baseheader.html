@@ -1,0 +1,34 @@
+<!DOCTYPE = html>
+<html lang="en">
+
+<head>
+    <title>NTI</title>
+    <meta charset="utf-8"/>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'styles/ntiadmin/display_page.css' %}">
+    <link rel="stylesheet" href="{% static 'styles/ntiadmin/print_page.css' %}">
+    <link rel="stylesheet" href="{% static 'styles/ntiadmin/nti_theme.css' %}">
+
+</head>
+
+<body>
+    {% block header %}
+    {% endblock header %}
+
+    {% block nav %}
+    {% endblock nav %}
+
+    <div style="display:table; width: 100%; padding: 0; margin: 0;">
+    {% block page %}
+    {% endblock page %}
+    
+    {% block aside %}
+    {% endblock aside %}
+    </div>
+    
+    {% block footer %}
+    {% endblock footer %}
+</body>
+
+</html>
+

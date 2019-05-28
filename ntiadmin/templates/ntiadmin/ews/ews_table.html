@@ -1,8 +1,41 @@
-{% extends "" %}
-{% block page %}    
-    <section>
-        
+{% extends "../baseheader.html" %}
+{% block header %}
+    <header id="header">
+            <h1>EWS</h1>
+    </header>
+{% endblock header %}
+
+{% block nav %}
+    <nav id="navbar">
+        <div class="container">
+            <p> PH </p>
+        </div>
+    </nav>
+{% endblock nav %}
 
 
-    </section>
+
+{% block page %}
+<section id="page">
+    <div class="container">
+        <h1> Main Page</h1>
+        <p> placeholder</p>
+    </div>
+</section>
 {% endblock page %}
+
+{% block aside %}
+<aside id="sidebar">
+    <div class="container">
+        <p>side content</p>
+    </div>
+</aside>
+{% endblock aside %}
+
+{% block footer %}
+    <footer id="footer">
+        <div class="container">
+            <p>NTI Sundbyberg</p>
+        </div>
+    </footer>
+{% endblock footer %}
