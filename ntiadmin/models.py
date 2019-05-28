@@ -50,6 +50,31 @@ EWS_VALUES = [
     (4, 'LILA'),
 ]
 
+EWS_ADAPTION = [
+    (0,'----'),
+    (1,'Hjälp att strukturera ett schema över skoldagen'),
+    (2,'Ge extra tydliga instruktioner'),
+    (3,'Ge stöd för att sätta igång arbetet'),
+    (4,'Ge ledning i att förstå texter'),
+    (5,'Ge förklaringar av ett ämnesområde på ett annat sätt'),
+    (6,'Ge färdighetsträning inom ramen för den ordinarie undervisningen, ex lästräning'),
+    (7,'Särskilda läromedel eller särskild utrustning'),
+    (8,'Hjälpmedel för att förstå och passa tider'),
+    (9,'Anpassad digital teknik – programvaror'),
+    (10,'Enstaka specialpedagogisk insats'),
+    (11,'Anpassade uppgifter (exempelvis i mindre delar)'),
+    (12,'Ge förförståelse inför kommande uppgifter'),
+    (13,'Ge stöd i att utveckla sin förmåga (inte bara att lösa aktuell uppgift)'),
+    (14,'Anpassning av tempo och nivå på undervisningen'),
+    (15,'Kortare genomgångar'),
+    (16,'Bekräftelse'),
+    (17,'Placering utan störning i klassrummet'),
+    (18,'Gruppsammansättning'),
+    (19,'Digitala hjälpmedel (lyssna på läromedel)'),
+    (20,'Språklig träning'),
+]
+
+
 class Student(models.Model):
 
     first_name = models.CharField(max_length=100)
@@ -71,7 +96,7 @@ class Course(models.Model):
         return self.course_name
 
 
-class CourseEnrolls(models.Model):
+class CourseEnroll(models.Model):
     student = models.ForeignKey("ntiadmin.Student", on_delete=models.CASCADE)
     course = models.ForeignKey("ntiadmin.Course", on_delete=models.CASCADE)
 
@@ -81,15 +106,13 @@ class CourseEnrolls(models.Model):
     class Meta:
         unique_together = ['student', 'course']
 
-class EWS_submission(models.Model):
-    enroll = models.ForeignKey("ntiadmin.CourseEnrolls", on_delete=models.CASCADE)
+class EWSSubmission(models.Model):
+    enroll = models.ForeignKey("ntiadmin.CourseEnroll", on_delete=models.CASCADE)
     submission_date = models.DateField(auto_now_add=True)
 
     month = models.IntegerField(choices=MONTHS, default=0)
     ews = models.IntegerField(choices=EWS_VALUES, default=0)
-
+    helper = models.TextField(default=" ")
 
     def __str__(self):
         return self.enroll
-
-
