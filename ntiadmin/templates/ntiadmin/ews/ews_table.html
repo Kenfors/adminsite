@@ -14,12 +14,31 @@
 {% endblock nav %}
 
 
-
 {% block page %}
 <section id="page">
     <div class="container">
         <h1> Main Page</h1>
-        <p> placeholder</p>
+        <form action="" method="post"> {% csrf_token %}   
+            {{filter}}
+        </form>
+        <table>
+            <thead>
+                {% for form in ewstable.forms %}
+                    {% if forloop.first %}
+                        {% for field in form %}
+                            <th>{{ field.label_tag }}</th>
+                        {% endfor %}
+                    {% endif %}
+            </thead>
+            <tbody>
+                    <tr>
+                        {% for field in form %}
+                            <td>{{ field }}</td>
+                        {% endfor %}
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
     </div>
 </section>
 {% endblock page %}

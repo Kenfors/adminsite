@@ -25,8 +25,9 @@ SECRET_KEY = '_c8vat7fk2o4b&w8q+zcyd=-ylxn5-5rz@(s+7pqx*9lbje_r&'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
-
+ALLOWED_HOSTS = ['*']
+#for i in range(255):
+#    ALLOWED_HOSTS.append()
 
 # Application definition
 

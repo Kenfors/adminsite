@@ -20,4 +20,5 @@ from . import views
 urlpatterns = [
     path('', views.tools, name='tools'),
     path('ews/', views.ews, name='ews'),
+    path('studie/', views.studieomdome, name='studieomdöme'),
 ]
