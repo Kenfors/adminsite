@@ -1,0 +1,112 @@
+<!DOCTYPE = html>
+    <html lang="en">
+        <head>
+            <title>STUDIEOMDÖME</title>
+            <meta charset="utf-8"/>
+            {% load static %}
+            <link rel="icon" href="{% static 'nti_icon.ico' %}">
+
+            <link rel='stylesheet' type="text/css" href="{% static 'styles/ntiadmin/admindoc/printFormat.css' %}">
+            <link rel='stylesheet' type="text/css" href="{% static 'styles/ntiadmin/admindoc/styleFormat.css' %}">
+            <script src="{% static 'script/ntiadmin/admindoc/texteditor_js.js' %}"></script>
+
+
+            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+
+
+    </head>
+    <body >
+        <header>
+            <img src="{% static 'nti_logo.png' %}">
+            <h1>STUDIEOMDÖME</h1>
+
+        </header>
+        <article>
+            </table>
+            <table>
+                <tr>
+                    <td>Elevens namn<br> <input type="text", placeholder="Förnamn Efternamn" ></td>
+                    <td>Personnummer<br> <input type="text", placeholder="ÅÅÅÅMMDD-PPPP"></td>
+                </tr>
+                <tr>
+                    <td>Klass och År<br> <input list="Klasser"></td>
+                    <datalist id="Klasser">
+                            <option value="EL18">
+                            <option value="EL17">
+                            <option value="EL16">
+                            <option value="TEK18">
+                            <option value="TEK17">
+                            <option value="TEK16">
+                            <option value="DIG18">
+                            <option value="DIG17">
+                            <option value="DIG16">
+                    </datalist>
+
+                    <td>Avbrottsdatum vid utskrivning<br> <p id=date>________</p>
+                        <!--
+
+                            <script>
+                                n = new Date()
+                                document.getElementById("date").innerHTML = 
+                                n.getFullYear() + "-" +
+                                n.getMonth() + "-" +
+                                n.getDate();
+                            </script>
+                        -->
+                    </td>
+                </tr>
+                <tr>
+                    <td>Kursbenämning<br><input type="text"></td>
+                    <td>Kurskod och Poäng<br><input type="text"></td>
+                </tr>
+            </table>
+        </article>
+        <input type="checkbox" style="height: auto;">Betygsunderlag saknas         
+        <input type="checkbox" style="margin-left: 10%; height: auto;">Betyg F<br>
+        <article>
+            <table>
+                <tr>
+                    <td>Avklarade moment<br>
+                        <div class="kenfo-texteditor">
+                            <p>
+                                <br>
+                            </p>
+                            <p>
+                                <br>
+                            </p>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td>Övrigt<br>
+                        <div class="kenfo-texteditor">
+                            <p>
+                                <br>
+                            </p>
+                            <p>
+                                <br>
+                            </p>
+                        </div>
+                </tr>
+                <tr>
+                    <td>Datum: <br> <p id="date2"></p>
+                        <script>
+                                n = new Date()
+                                document.getElementById("date2").innerHTML = 
+                                n.getFullYear() + "-" +
+                                (n.getMonth() + 1) + "-" +
+                                n.getDate();
+                        </script>
+                        Lärarens Namn: <input type="text"> <br>
+                        <br>.................................. <br>
+                        Lärarens underskrift
+                    </td>
+
+                </tr>
+            </table>        
+        </article>
+
+</body>
+    <script>setup();</script>
+</html>
