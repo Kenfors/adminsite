@@ -126,6 +126,12 @@ def ews_report_table(request, opt, value):
 
     return HttpResponse(response.render({'form' : myForm.as_table()}))
 
+def dataimport(request):
+
+    
+
+    return render(request, 'Hello!')
+
 
 
 def studieomdome(request):
