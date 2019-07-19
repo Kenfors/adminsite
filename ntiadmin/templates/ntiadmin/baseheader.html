@@ -9,6 +9,9 @@
     <link rel="stylesheet" href="{% static 'styles/ntiadmin/print_page.css' %}">
     <link rel="stylesheet" href="{% static 'styles/ntiadmin/nti_theme.css' %}">
 
+    {% block head %}
+    {% endblock head %}
+
 </head>
 
 <body>
@@ -29,6 +32,7 @@
     {% block footer %}
     {% endblock footer %}
 </body>
-
+    {% block script %}
+    {% endblock script %}
 </html>
 

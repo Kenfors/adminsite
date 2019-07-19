@@ -1,0 +1,43 @@
+{% extends "../baseheader.html" %}
+{% block header %}
+    <header id="header">
+            <h1>Kursadmin</h1>
+    </header>
+{% endblock header %}
+
+
+{% block page %}
+<section id="page">
+    <div class="container">
+        
+    </div>
+</section>
+{% endblock page %}
+
+{% block aside %}
+<aside id="sidebar">
+    <div class="container">
+        <p>Google Classroom Auth</p>
+
+        <!--Add buttons to initiate auth sequence and sign out-->
+        <button id="authorize_button" style="display: none;">Authorize</button>
+        <button id="signout_button" style="display: none;">Sign Out</button>
+
+        <div id="courses" style="white-space: pre-wrap;"></div>
+    </div>
+</aside>
+{% endblock aside %}
+
+{% block footer %}
+    <footer id="footer">
+        <div class="container">
+            <p>NTI Sundbyberg</p>
+        </div>
+    </footer>
+{% endblock footer %}
+
+{% block script %}
+{% load static %}
+    <script src="https://apis.google.com/js/api.js"></script>
+    <script src="{% static 'script/ntiadmin/classtracker/classes.js' %}"></script>
+{% endblock script %}

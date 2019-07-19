@@ -34,6 +34,7 @@ ALLOWED_HOSTS = ['*']
 INSTALLED_APPS = [
     'wall',
     'ntiadmin',
+    'ntiadmin.classtracker',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',

@@ -18,10 +18,6 @@ from django.urls import path, include
 from . import views
 
 urlpatterns = [
-    path('', views.tools, name='tools'),
-    path('ews/', views.ews, name='ews'),
-    path('import/', views.dataimport, name='data'),
-    path('studie/', views.studieomdome, name='studieomdöme'),
-    path('classes/', include('ntiadmin.classtracker.urls')),
+    path('', views.classview),
     
 ]
