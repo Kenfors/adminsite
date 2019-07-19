@@ -1,4 +1,10 @@
 {% extends "../baseheader.html" %}
+
+{% block head %}
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'styles/ntiadmin/classes/courseview.css' %}">
+{% endblock head %}
+
 {% block header %}
     <header id="header">
             <h1>Kursadmin</h1>
@@ -7,9 +13,13 @@
 
 
 {% block page %}
-<section id="page">
+<section >
     <div class="container">
-        
+        <div id="page">
+            <div id="courseTable" class="row">
+                
+            </div>
+        </div>
     </div>
 </section>
 {% endblock page %}

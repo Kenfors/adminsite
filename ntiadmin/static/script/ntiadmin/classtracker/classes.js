@@ -8,13 +8,20 @@ var DISCOVERY_DOCS = ["https://www.googleapis.com/discovery/v1/apis/classroom/v1
 
 // Authorization scopes required by the API; multiple scopes can be
 // included, separated by spaces.
-var SCOPES = "https://www.googleapis.com/auth/classroom.courses.readonly";
+var SCOPES = "https://www.googleapis.com/auth/classroom.courses.readonly ";
+SCOPES += " https://www.googleapis.com/auth/classroom.coursework.me.readonly ";
+SCOPES += " https://www.googleapis.com/auth/classroom.rosters.readonly ";
+SCOPES += " https://www.googleapis.com/auth/classroom.coursework.students.readonly ";
+
+
+console.log("Scopes:" + SCOPES);
 
 var authorizeButton = document.getElementById('authorize_button');
 var signoutButton = document.getElementById('signout_button');
 
 
-
+var courseTable = document.getElementById('courseTable');
+var tableData = []
 
 /**
  *  On load, called to load the auth2 library and API client library.
@@ -104,11 +111,98 @@ function listCourses() {
             let container = document.getElementById('courses')
             container.insertAdjacentHTML('beforeend', "<h3>Kurser: </h3>");
             for(let i = 0; i < courseQuery.length;i++){
-                container.insertAdjacentHTML('beforeend', "<div>" + courseQuery[i].name + "</div>");
+                container.insertAdjacentHTML('beforeend', "<div " + "onclick='displayCourse(" + courseQuery[i].id + ")'" +">" + courseQuery[i].name + "</div>");
             }
         });
     } catch (error) {
         console.log("Error: " + error);
     }
+
+}
+
+function displayCourse(courseid){
+    let contentPage = document.getElementById('page');
+    
+    gapi.client.classroom.courses.get(
+        {
+            id : courseid,
+        }
+        ).then(function(Cresponse){
+            console.log("response: " + Cresponse.result.name);
+            contentPage.insertAdjacentHTML('afterbegin', "<h1>" + Cresponse.result.name +"</h1>");
+
+            // Make Student list?
+            // Too later fill with celldata...
+
+
+            gapi.client.classroom.courses.courseWork.list(
+                {
+                    courseId : courseid,
+                }
+            ).then(function(CWresponse){
+
+                works = CWresponse.result.courseWork
+                //console.log("CW result: " + JSON.stringify(CWresponse.result, null, 2));
+                
+                for(let i = 0; i < works.length;i++){
+                    addWorkToTable(works[i], courseid);
+                }
+            });
+
+        });
+
+}
+
+function addWorkToTable(cWork, cId){
+    
+    newWork = document.createElement('div');
+    newWork.classList.add("column");
+    newWork.id = cWork.id;
+    newWork.insertAdjacentHTML('beforeend', "<h3>" + cWork.title + "</h3>");
+    courseTable.appendChild(newWork);
+
+    colorField = document.createElement('div');
+    colorField.style.backgroundColor = 'white';
+
+
+    gapi.client.classroom.courses.courseWork.studentSubmissions.list(
+        {
+            courseId : cId,
+            courseWorkId : cWork.id,
+        }
+    ).then(function(response){
+
+        set = response.result.studentSubmissions;
+
+        //Fill Table with Data...?
+        //Data first?
+        for (let i = 0; i < set.length; i++){
+            //console.log("Submissions: " + JSON.stringify(set[i], null, 2));
+
+            if (!(set[i].userId in tableData)){
+                tableData[set[i].userId] = {};
+            }
+            let newDataSet = {
+                'state' : set[i].state,
+                'link' : set[i].alternateLink,
+                'lastUpdate' : set[i].updateTime,
+                'type' : set[i].courseWorkType,
+            }
+            tableData[set[i].userId][set[i].courseWorkId] = newDataSet;
+
+            block = document.getElementById(set[i].courseWorkId).insertAdjacentHTML(
+                'beforeend',
+                '<p>' + newDataSet.state + '</p>' +
+                '<p>' + set[i].userId + '</p>'
+            )
+        }
+
+    });
+    
+}
+
+function drawTable(importantOnly){
+
+    console.log(tableData);
 
 }
