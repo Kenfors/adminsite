@@ -34,6 +34,7 @@ ALLOWED_HOSTS = ['*']
 INSTALLED_APPS = [
     'wall',
     'ntiadmin',
+    'teachtech',
     'ntiadmin.classtracker',
     'django.contrib.admin',
     'django.contrib.auth',

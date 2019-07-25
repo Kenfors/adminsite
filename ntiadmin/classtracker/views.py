@@ -8,6 +8,6 @@ from django.http import HttpResponse
 
 def classview(request):
     template = loader.get_template('ntiadmin/classtracker/classindex.html')
-
+    
 
     return HttpResponse(template.render({}, request))
