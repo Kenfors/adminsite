@@ -1,12 +1,22 @@
 
-
-.column {
-    display: flex;
-    flex-direction: column;
-    margin: 2px;
-    background-color: white;
+.course-table {
+    font-family: Helvetica;
+    border-collapse: collapse;
+    width: 100%;
 }
-.row {
-    display: flex;
-    flex-direction: row;
+.course-table-row {
+    
+}
+.course-table-header, .course-table-cell {
+
+}
+
+.course-table-cell {
+    cursor: pointer;
+    transition: all 100ms ease-in-out;
+    outline: 0px solid pink;
+}
+.course-table-cell:hover {
+    outline: 2px solid pink;
+
 }

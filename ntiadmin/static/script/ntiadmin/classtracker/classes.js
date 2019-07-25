@@ -21,7 +21,8 @@ var signoutButton = document.getElementById('signout_button');
 
 
 var courseTable = document.getElementById('courseTable');
-var tableData = []
+var tableData = {}
+var numOfRequests;
 
 /**
  *  On load, called to load the auth2 library and API client library.
@@ -111,7 +112,8 @@ function listCourses() {
             let container = document.getElementById('courses')
             container.insertAdjacentHTML('beforeend', "<h3>Kurser: </h3>");
             for(let i = 0; i < courseQuery.length;i++){
-                container.insertAdjacentHTML('beforeend', "<div " + "onclick='displayCourse(" + courseQuery[i].id + ")'" +">" + courseQuery[i].name + "</div>");
+                //container.insertAdjacentHTML('beforeend', "<div " + "onclick='displayCourse(" + courseQuery[i].id + ")'" +">" + courseQuery[i].name + "</div>");
+                container.insertAdjacentHTML('beforeend', "<div " + "onclick='retrieveCourseData(" + courseQuery[i].id + ")'" +">" + courseQuery[i].name + "</div>");
             }
         });
     } catch (error) {
@@ -120,89 +122,114 @@ function listCourses() {
 
 }
 
-function displayCourse(courseid){
-    let contentPage = document.getElementById('page');
+function clearTable(contentPage){
+    while(contentPage.hasChildNodes()){
+        contentPage.removeChild(contentPage.firstChild);
+    }
+}
+
+function retrieveCourseData(courseid){
     
-    gapi.client.classroom.courses.get(
-        {
-            id : courseid,
-        }
-        ).then(function(Cresponse){
-            console.log("response: " + Cresponse.result.name);
-            contentPage.insertAdjacentHTML('afterbegin', "<h1>" + Cresponse.result.name +"</h1>");
+    clearTable(document.getElementById('page'));
 
-            // Make Student list?
-            // Too later fill with celldata...
+    gapi.client.classroom.courses.get({
+        id : courseid,
+    }).then(function(courseQuery){
+        // Do stuff with course?
+
+        //console.log("" + JSON.stringify(courseQuery.result));
+
+        let page = document.getElementById('page');
+        page.insertAdjacentHTML('afterbegin', "<h1>" + courseQuery.result.name + "</h1>");
 
 
-            gapi.client.classroom.courses.courseWork.list(
-                {
-                    courseId : courseid,
-                }
-            ).then(function(CWresponse){
+        return gapi.client.classroom.courses.students.list({
+            courseId : courseid,
+        });
+    }).then(function(studentQuery){
 
-                works = CWresponse.result.courseWork
-                //console.log("CW result: " + JSON.stringify(CWresponse.result, null, 2));
+        gapi.client.classroom.courses.courseWork.list({
+            courseId : courseid,
+            
+        }).then(function(worksQuery){
+            let works = worksQuery.result.courseWork;
+            let stus = studentQuery.result.students;
+
+            var table = document.createElement('table');
+            table.classList.add('course-table');
+
+            let nameRow = document.createElement('tr');
+            nameRow.classList.add('course-table-row');
+            nameRow.appendChild(document.createElement('th'));
+            for (let j = 0; j < stus.length; j++){
+                let names = document.createElement('th');
+                names.innerHTML = stus[j].profile.name.fullName;
+                nameRow.classList.add('course-table-header');
+                nameRow.appendChild(names);
+            }
+            table.appendChild(nameRow);
+
                 
-                for(let i = 0; i < works.length;i++){
-                    addWorkToTable(works[i], courseid);
+
+            var datasheet = {};
+            for (let i = 0; i < works.length; i++){
+                let dataRow = document.createElement('tr');
+                dataRow.classList.add('course-table-row');
+                let rowName = document.createElement('th');
+                rowName.innerHTML = works[i].title;
+                rowName.classList.add('course-table-cell');
+                dataRow.appendChild(rowName);
+                datasheet[works[i].id] = {}
+                for (let j = 0; j < stus.length; j++){
+//                    console.log("" + works[i].id);
+//                    console.log("" + stus[j].profile.id);
+                    datasheet[works[i].id][stus[j].profile.id] = { 'cell' : "" + i + j};
+                    let data = document.createElement('td');
+                    data.classList.add('course-table-cell');
+                    data.id = "" + i + j;
+                    dataRow.appendChild(data);
                 }
-            });
+                table.appendChild(dataRow);
+
+                gapi.client.classroom.courses.courseWork.studentSubmissions.list({
+                    courseId : courseid,
+                    courseWorkId : works[i].id,
+
+                }).then(function(submissionSet){
+
+                    submissionSet = submissionSet.result.studentSubmissions;
+
+                    for(let i = 0; i < submissionSet.length;i++){
+                        let cell = document.getElementById(datasheet[submissionSet[i].courseWorkId][submissionSet[i].userId].cell);
+
+                        cell.style.backgroundColor = 'white';
+                        cell.addEventListener('click', function(event){
+                            window.open(submissionSet[i].alternateLink);
+                        });
+
+                        switch (submissionSet[i].state) {
+                            case 'CREATED':
+                            case 'NEW':
+                            cell.style.backgroundColor = 'red';
+                            break;
+                            case 'RECLAIMED_BY_STUDENT':
+                            case 'RETURNED':
+                            cell.style.backgroundColor = 'yellow';
+                            break;
+                            case 'TURNED_IN':
+                            cell.style.backgroundColor = 'green';
+                            break;
+                            default:
+                            cell.style.backgroundColor = 'white';
+                        }
+                    }                    
+
+                });
+
+            }
+        
+        document.getElementById('page').appendChild(table);
 
         });
-
-}
-
-function addWorkToTable(cWork, cId){
-    
-    newWork = document.createElement('div');
-    newWork.classList.add("column");
-    newWork.id = cWork.id;
-    newWork.insertAdjacentHTML('beforeend', "<h3>" + cWork.title + "</h3>");
-    courseTable.appendChild(newWork);
-
-    colorField = document.createElement('div');
-    colorField.style.backgroundColor = 'white';
-
-
-    gapi.client.classroom.courses.courseWork.studentSubmissions.list(
-        {
-            courseId : cId,
-            courseWorkId : cWork.id,
-        }
-    ).then(function(response){
-
-        set = response.result.studentSubmissions;
-
-        //Fill Table with Data...?
-        //Data first?
-        for (let i = 0; i < set.length; i++){
-            //console.log("Submissions: " + JSON.stringify(set[i], null, 2));
-
-            if (!(set[i].userId in tableData)){
-                tableData[set[i].userId] = {};
-            }
-            let newDataSet = {
-                'state' : set[i].state,
-                'link' : set[i].alternateLink,
-                'lastUpdate' : set[i].updateTime,
-                'type' : set[i].courseWorkType,
-            }
-            tableData[set[i].userId][set[i].courseWorkId] = newDataSet;
-
-            block = document.getElementById(set[i].courseWorkId).insertAdjacentHTML(
-                'beforeend',
-                '<p>' + newDataSet.state + '</p>' +
-                '<p>' + set[i].userId + '</p>'
-            )
-        }
-
     });
-    
-}
-
-function drawTable(importantOnly){
-
-    console.log(tableData);
-
 }
