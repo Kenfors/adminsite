@@ -45,7 +45,6 @@ function listCourses() {
         document.getElementById('side').appendChild(courseList);
     });
 
-    
 
 }
 
@@ -91,10 +90,14 @@ function courseHandler(courseid){
             }
 
             buildTable(stusSimple,worksSimple);
-        });
+        });     
 
     });
-    
+}
+
+function buildTable2(stus, works){
+    let viewTable = document.createElement('div');
+
 }
 
 function buildTable(stus, works){
@@ -105,54 +108,69 @@ function buildTable(stus, works){
     table = document.createElement('table');
     table.classList.add('table');
     table.classList.add('table-hover');
-    table.classList.add('table-dark');
+    table.classList.add('table-light');
     table.classList.add('table-bordered');
+
     
+    table.style.wordWrap = 'break-word';
 
     let tableBody = document.createElement('tbody');
 
     for (let i = 0; i < stus.length; i++) {
         let row = document.createElement('tr');
+
         for (let j = 0; j < works.length; j++) {
             if (j==0){
-                let name = document.createElement('th');
+                let name = document.createElement('td');
                 name.innerHTML = stus[i].name;
-                //Style
+                name.classList.add('firstCol');
+
                 row.appendChild(name);
             }
+            
             let data = document.createElement('td');
             data.id = "" + stus[i].id + works[j].id;
+
             //data.appendChild(getSpinner());
 
             row.appendChild(data);
         }
         tableBody.appendChild(row);
     }
+
     table.appendChild(tableBody);
     document.getElementById('page').innerHTML = "";
     tableContainer.appendChild(table);
+
     document.getElementById('page').appendChild(tableContainer);
+
 
     let tableHead = document.createElement('thead');
     let headerRow = document.createElement('tr');
     for (let j = 0; j < works.length; j++) {
+        let text = document.createElement('div');
+        text.style.width = '4em';
         if(j == 0){
             let data = document.createElement('th');
             data.innerHTML = 'Namn';
+            data.classList.add('firstCol');
             headerRow.appendChild(data);    
         }
-        let data = document.createElement('th');
-        data.innerHTML = works[j].name;
         
+        let data = document.createElement('th');
+        text.innerHTML = works[j].name;
+        data.appendChild(text);
+        
+
+
         headerRow.appendChild(data);
 
         loadCellData(works[j].id);
 
-
     }
 
     tableHead.appendChild(headerRow);
-    document.getElementById('page').firstChild.firstChild.insertBefore(tableHead, table.firstChild);
+    document.getElementById('page').lastChild.firstChild.insertBefore(tableHead, table.firstChild);
 
 
 
@@ -185,8 +203,7 @@ function buildCell(submission, cell){
 
     //console.log(JSON.stringify(submission, null, 2));
     /**
-     * 
-     * {
+     {
   "courseId": "37347804713",
   "courseWorkId": "37347804723",
   "id": "Cg4IjP69kYsBELOM6ZCLAQ",
@@ -195,12 +212,7 @@ function buildCell(submission, cell){
   "alternateLink": "https://classroom.google.com/c/MzczNDc4MDQ3MTNa/sa/MzczNDc4MDQ3MjNa/submissions/student/MzczNDkxOTU1MzJa",
   "courseWorkType": "SHORT_ANSWER_QUESTION",
   "assignmentSubmission": {}
-}
-     * 
-     * 
-     * 
-     * 
-     */
+} */
 
     cell.innerHTML = "";
     switch (submission.state) {

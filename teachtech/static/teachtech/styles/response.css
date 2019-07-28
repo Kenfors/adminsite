@@ -5,3 +5,14 @@
     outline: 1px solid black;
     cursor: pointer;
 }
+
+.firstCol {
+    position: relative;
+    width: 12em;
+
+} 
+
+td, th {
+    width: 20em;
+
+}
