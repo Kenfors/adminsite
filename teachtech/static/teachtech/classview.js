@@ -156,15 +156,14 @@ function buildTable(stus, works){
             data.classList.add('firstCol');
             headerRow.appendChild(data);    
         }
-        
+
         let data = document.createElement('th');
         text.innerHTML = works[j].name;
         data.appendChild(text);
+
         
 
-
         headerRow.appendChild(data);
-
         loadCellData(works[j].id);
 
     }
@@ -214,21 +213,47 @@ function buildCell(submission, cell){
   "assignmentSubmission": {}
 } */
 
-    cell.innerHTML = "";
+    //
+    
+
+    cell.classList.add('clickable');
+
+    
+
+    cell.innerHTML = " ";
+
+    cell.onclick = function(event){
+        window.open(submission.alternateLink);
+    }
     switch (submission.state) {
         case 'CREATED':
-        case 'NEW':
             cell.style.backgroundColor = 'red';
-        break;
+            break;
+        case 'NEW':
+            cell.style.backgroundColor = 'purple';
+            break;
         case 'RECLAIMED_BY_STUDENT':
         case 'RETURNED':
             cell.style.backgroundColor = 'yellow';
-        break;
+            break;
         case 'TURNED_IN':
             cell.style.backgroundColor = 'green';
-        break;
+            if(!submission.assignedGrade && !submission.draftGrade ){
+                cell.innerHTML = 'Orättad';
+                cell.style.border = '4px solid red';
+            }
+            break;
         default:
             cell.style.backgroundColor = 'white';
+    }
+
+    if (submission.assignedGrade){
+        cell.innerHTML = submission.assignedGrade;
+        cell.style.backgroundColor = 'green';
+    }
+    else if (submission.draftGrade){
+        cell.innerHTML = submission.draftGrade;
+        cell.style.backgroundColor = 'green';
     }
 
     cell.value = submission;

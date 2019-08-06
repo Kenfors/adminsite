@@ -11,3 +11,6 @@ def classview(request):
     
 
     return HttpResponse(template.render({}, request))
+
+
+
